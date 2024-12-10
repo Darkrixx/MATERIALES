@@ -92,8 +92,14 @@ def obtener_produccion():
                 materiales_agrupados[material_name]['Cantidad a Consumir'] += material_qty
                 materiales_agrupados[material_name]['Máquinas'].add(machine_name)
                 materiales_agrupados[material_name]['Productos'].add(product_name)
+
+                # Actualizar la fecha de finalización más cercana
+                nueva_fecha = fecha_finalizacion.strftime('%Y-%m-%d %H:%M:%S')
+                if (materiales_agrupados[material_name]['Fecha de Finalización'] is None or
+                        nueva_fecha < materiales_agrupados[material_name]['Fecha de Finalización']):
+                    materiales_agrupados[material_name]['Fecha de Finalización'] = nueva_fecha
+
                 materiales_agrupados[material_name]['Horas'] = horas
-                materiales_agrupados[material_name]['Fecha de Finalización'] = fecha_finalizacion.strftime('%Y-%m-%d %H:%M:%S')
 
         # Convertir agrupaciones a resultados finales
         for material_name, data in materiales_agrupados.items():
