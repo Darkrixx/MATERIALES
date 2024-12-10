@@ -75,7 +75,6 @@ def obtener_produccion():
                 'fields': ['product_id', 'product_uom_qty']
             })
 
-            first_row = True
             for move in stock_moves:
                 material_name = move['product_id'][1]
                 contenido_corchetes = extraer_contenido_corchetes(material_name)
@@ -85,27 +84,15 @@ def obtener_produccion():
 
                 material_qty = move['product_uom_qty']
 
-                if first_row:
-                    results.append({
-                        'Máquina (Origen)': machine_name,
-                        'Producto a Fabricar': product_name,
-                        'Cantidad a Fabricar': product_qty,
-                        'Material (Producto)': material_name,
-                        'Cantidad a Consumir': material_qty,
-                        'Horas': horas,
-                        'Fecha de Finalización': fecha_finalizacion.strftime('%Y-%m-%d %H:%M:%S')
-                    })
-                    first_row = False
-                else:
-                    results.append({
-                        'Máquina (Origen)': '',
-                        'Producto a Fabricar': '',
-                        'Cantidad a Fabricar': '',
-                        'Material (Producto)': material_name,
-                        'Cantidad a Consumir': material_qty,
-                        'Horas': '',
-                        'Fecha de Finalización': ''
-                    })
+                results.append({
+                    'Máquina (Origen)': machine_name,
+                    'Producto a Fabricar': product_name,
+                    'Cantidad a Fabricar': product_qty,
+                    'Material (Producto)': material_name,
+                    'Cantidad a Consumir': material_qty,
+                    'Horas': horas,
+                    'Fecha de Finalización': fecha_finalizacion.strftime('%Y-%m-%d %H:%M:%S')
+                })
 
         # Devolver resultados como JSON
         return jsonify(results)
