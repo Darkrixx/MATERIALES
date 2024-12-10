@@ -4,6 +4,7 @@ import pandas as pd
 from datetime import datetime, timedelta
 import re
 import os
+from collections import defaultdict
 
 # Configurar Flask
 app = Flask(__name__)
@@ -39,6 +40,9 @@ def obtener_produccion():
         results = []
         fechas_finalizacion_maquina = {}
         excluir_materias = ['GFIJSNACKS', 'ACEGAO', 'SAL', 'GAS', 'PAT', 'GFIJPATAFRIT', 'gasfijmenos50gr', 'GASTEMBOLSAR', 'ACEG']
+
+        # Diccionario para agrupar materiales
+        materiales_agrupados = defaultdict(lambda: {'Cantidad a Consumir': 0, 'Máquinas': set(), 'Productos': set(), 'Horas': None, 'Fecha de Finalización': None})
 
         # Procesar órdenes de producción
         for production_id in production_ids:
@@ -84,15 +88,23 @@ def obtener_produccion():
 
                 material_qty = move['product_uom_qty']
 
-                results.append({
-                    'Máquina (Origen)': machine_name,
-                    'Producto a Fabricar': product_name,
-                    'Cantidad a Fabricar': product_qty,
-                    'Material (Producto)': material_name,
-                    'Cantidad a Consumir': material_qty,
-                    'Horas': horas,
-                    'Fecha de Finalización': fecha_finalizacion.strftime('%Y-%m-%d %H:%M:%S')
-                })
+                # Agrupar materiales
+                materiales_agrupados[material_name]['Cantidad a Consumir'] += material_qty
+                materiales_agrupados[material_name]['Máquinas'].add(machine_name)
+                materiales_agrupados[material_name]['Productos'].add(product_name)
+                materiales_agrupados[material_name]['Horas'] = horas
+                materiales_agrupados[material_name]['Fecha de Finalización'] = fecha_finalizacion.strftime('%Y-%m-%d %H:%M:%S')
+
+        # Convertir agrupaciones a resultados finales
+        for material_name, data in materiales_agrupados.items():
+            results.append({
+                'Material (Producto)': material_name,
+                'Cantidad a Consumir': data['Cantidad a Consumir'],
+                'Máquinas': ', '.join(data['Máquinas']),
+                'Productos': ', '.join(data['Productos']),
+                'Horas': data['Horas'],
+                'Fecha de Finalización': data['Fecha de Finalización']
+            })
 
         # Devolver resultados como JSON
         return jsonify(results)
