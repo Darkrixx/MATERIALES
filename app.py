@@ -19,9 +19,9 @@ def obtener_produccion():
     try:
         # Datos de conexión (pueden ser configurables con variables de entorno)
         url = os.getenv('ODOO_URL', 'https://erp.snackselvalle.com')
-        db = os.getenv('ODOO_DB', 'snackselvalle_fc0268f0')
-        username = os.getenv('ODOO_USERNAME', 'josemiruiz@snackselvalle.com')
-        password = os.getenv('ODOO_PASSWORD', '@Contraseña123')
+        db = os.getenv('DB', 'snackselvalle_fc0268f0')
+        username = os.getenv('USUARIO', 'josemiruiz@snackselvalle.com')
+        password = os.getenv('PASSWORD', '@Contraseña123')
 
         # Autenticación
         common = xmlrpc.client.ServerProxy(f'{url}/xmlrpc/2/common')

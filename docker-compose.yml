@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  Materiales:
+    build:
+      context: .
+      dockerfile: Dockerfile
+#Si necesitas pasar variables de entorno, puedes hacerlo así:
+    environment:
+      ODOO_URL: ${ODOO_URL}
+      DB: ${DB}
+      USUARIO: ${USUARIO}
+      PASSWORD: ${PASSWORD}
+      TOKEN: ${TOKEN}
+    volumes:
+      - ./datos:/app/datos
+    ports:
+       - "5123:5000"
