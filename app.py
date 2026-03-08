@@ -41,7 +41,7 @@ def obtener_produccion():
     try:
         # Datos de conexión (pueden ser configurables con variables de entorno)
         url = os.getenv('ODOO_URL', 'https://erp.snackselvalle.com')
-        db = os.getenv('ODOO_DB', 'snackselvalle_fc0268f0')
+        db = os.getenv('ODOO_DB', 'snackselvalle')
         username = os.getenv('ODOO_USERNAME', 'josemiruiz@snackselvalle.com')
         password = os.getenv('ODOO_PASSWORD', '@Contraseña123')
 
@@ -219,4 +219,5 @@ def obtener_produccion():
 # Ejecutar el servidor en Railway
 if __name__ == '__main__':
     port = int(os.getenv("PORT", 5000))
+
     app.run(host='0.0.0.0', port=port)
